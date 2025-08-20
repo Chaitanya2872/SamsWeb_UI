@@ -18,6 +18,12 @@ class ErrorBoundary extends React.Component<
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('Application Error:', error, errorInfo);
+    // Log additional error details
+    console.error('Error details:', {
+      error: error.toString(),
+      errorInfo,
+      location: window.location.href,
+    });
     
     // Here you could send error to logging service
     // logErrorToService(error, errorInfo);

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
-  MagnifyingGlassIcon, 
-  FunnelIcon,
+  MagnifyingGlassIcon,
+  BuildingOfficeIcon, 
   ArrowsUpDownIcon,
   Squares2X2Icon,
   ListBulletIcon

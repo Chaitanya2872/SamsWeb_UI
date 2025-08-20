@@ -19,7 +19,6 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 import { RemarksModal } from './RemarksModal';
 import { useStructure } from '../../hooks/useStructures';
 import { useCanManageRemarks } from '../../hooks/useAuth';
-import type { Structure } from '../../types/structure';
 import structuresService from '../../services/structures';
 
 interface StructureDetailModalProps {

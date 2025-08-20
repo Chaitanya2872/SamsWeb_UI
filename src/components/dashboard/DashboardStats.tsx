@@ -1,9 +1,9 @@
 import React from 'react';
-import { 
+import {
   BuildingOfficeIcon,
   CheckCircleIcon,
   ClockIcon,
-  ExclamationTriangleIcon
+  ExclamationTriangleIcon,
 } from '@heroicons/react/24/outline';
 
 interface DashboardStatsProps {
@@ -20,7 +20,7 @@ export const DashboardStats: React.FC<DashboardStatsProps> = ({ summary }) => {
     {
       label: 'Total Structures',
       value: summary.total_structures,
-      icon: BuildingOfficeIcon,
+      icon: BuildingOfficeIcon, // ✅ Now properly imported
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
     },

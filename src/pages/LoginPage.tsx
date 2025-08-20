@@ -9,7 +9,7 @@ export const LoginPage: React.FC = () => {
   const location = useLocation();
   const { isAuthenticated } = useAuth();
 
-  const from = (location.state as any)?.from?.pathname || '/dashboard';
+  const from = (location.state as any)?.from?.pathname ;
 
 
 
