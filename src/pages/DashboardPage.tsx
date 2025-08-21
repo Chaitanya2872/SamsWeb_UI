@@ -112,7 +112,7 @@ export const DashboardPage: React.FC = () => {
       <DashboardStats summary={summary ?? {total_structures: 0, by_status: {}}} />
 
       {/* Quick Actions */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-4 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <div className="card p-4 hover:shadow-md transition cursor-pointer">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-blue-50 rounded-lg">

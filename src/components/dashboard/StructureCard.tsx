@@ -80,7 +80,7 @@ export const StructureCard: React.FC<StructureCardProps> = ({ structure, onClick
       )}
 
       {/* Building Details */}
-      <div className="grid grid-cols-2 gap-3 mb-3 text-sm">
+      <div className="grid grid-cols-4 gap-3 mb-3 text-sm">
         <div>
           <span className="text-gray-500">Type:</span>
           <div className="font-medium text-gray-900 capitalize">
