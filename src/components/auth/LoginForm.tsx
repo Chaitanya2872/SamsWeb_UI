@@ -4,6 +4,7 @@ import { EyeIcon, EyeSlashIcon, EnvelopeIcon, LockClosedIcon } from '@heroicons/
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { useAuth } from '../../hooks/useAuth';
+import { useToast } from '../../contexts/ToastContext';
 import type { LoginRequest } from '../../types/auth';
 
 interface LoginFormProps {
@@ -12,6 +13,7 @@ interface LoginFormProps {
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
   const { login, isLoading } = useAuth();
+  const { showToast } = useToast();
   const [formData, setFormData] = useState<LoginRequest>({
     identifier: '',
     password: '',
@@ -23,7 +25,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
@@ -46,29 +47,28 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSuccess }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login form submitted with:', formData);
     
     if (!validate()) {
-      console.log('Validation failed:', errors);
       return;
     }
 
     try {
-      console.log('Calling login with credentials:', { identifier: formData.identifier });
       const response = await login(formData);
-      console.log('Login response:', response);
       
       if (response.success) {
-        console.log('Login successful, user:', response.user);
-        onSuccess?.();
+        showToast('success', 'Login successful! Redirecting to dashboard...', 3000);
+        setTimeout(() => {
+          onSuccess?.();
+        }, 1000);
       } else {
-        console.log('Login failed:', response.message);
+        showToast('error', response.message || 'Login failed. Please try again.');
       }
     } catch (error: any) {
-      console.error('Login error caught:', error);
+      const errorMessage = error.error || 'Login failed. Please try again.';
       setErrors({
-        submit: error.error || 'Login failed. Please try again.',
+        submit: errorMessage,
       });
+      showToast('error', errorMessage);
     }
   };
 

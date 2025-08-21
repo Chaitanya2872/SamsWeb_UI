@@ -27,10 +27,15 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
-  // Check role permissions if roles are specified
-  if (roles.length > 0 && user) {
+  // Check role permissions if roles are specified and not empty
+  if (roles && roles.length > 0 && user) {
+    // Add safety checks for user properties
+    const userRoles = user.roles || [];
+    const userRole = user.role;
+    
     const hasRequiredRole = roles.some(role => 
-      user.roles?.includes(role as any) || user.role === role
+      (Array.isArray(userRoles) && userRoles.includes(role as any)) || 
+      userRole === role
     );
 
     if (!hasRequiredRole) {

@@ -57,14 +57,18 @@ export const useStructures = (params: UseStructuresParams = {}): UseStructuresRe
         sortOrder,
       });
 
+      console.log('Structures API response:', response);
+
       if (response.success) {
-        setStructures(response.data.structures);
+        console.log('Structures data:', response.data);
+        setStructures(response.data.structures || []);
         setPagination(response.data.pagination);
         setSummary(response.data.summary);
       } else {
         throw new Error('Failed to fetch structures');
       }
     } catch (err: any) {
+      console.error('Error fetching structures:', err);
       setError(err.error || err.message || 'Failed to fetch structures');
       setStructures([]);
       setPagination(null);

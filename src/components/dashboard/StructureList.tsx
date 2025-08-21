@@ -131,10 +131,10 @@ export const StructureList: React.FC<StructureListProps> = ({ onStructureClick }
       </div>
 
       {/* Status Filters */}
-      {summary && (
+      {summary && summary.by_status && (
         <div className="flex flex-wrap gap-2">
           <span className="text-sm text-gray-500 mr-2">Filter by status:</span>
-          {Object.entries(summary.by_status).map(([status, count]) => (
+          {Object.entries(summary.by_status || {}).map(([status, count]) => (
             <Button
               key={status}
               variant={statusFilter === status ? 'primary' : 'outline'}
@@ -158,9 +158,9 @@ export const StructureList: React.FC<StructureListProps> = ({ onStructureClick }
       {!isLoading && pagination && (
         <div className="flex items-center justify-between text-sm text-gray-600">
           <p>
-            Showing {((pagination.current_page - 1) * pagination.per_page) + 1} to{' '}
-            {Math.min(pagination.current_page * pagination.per_page, pagination.total_items)} of{' '}
-            {pagination.total_items} structures
+            Showing {((pagination?.current_page || 1) - 1) * (pagination?.per_page || 0) + 1} to{' '}
+            {Math.min((pagination?.current_page || 1) * (pagination?.per_page || 0), pagination?.total_items || 0)} of{' '}
+            {pagination?.total_items || 0} structures
           </p>
           {searchQuery && (
             <p>
@@ -171,13 +171,13 @@ export const StructureList: React.FC<StructureListProps> = ({ onStructureClick }
       )}
 
       {/* Structure Grid/List */}
-      {!isLoading && structures.length > 0 && (
+      {!isLoading && structures && structures.length > 0 && (
         <div className={
           viewMode === 'grid' 
             ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
             : 'space-y-4'
         }>
-          {structures.map((structure) => (
+          {(structures || []).map((structure) => (
             <StructureCard
               key={structure._id}
               structure={structure}
@@ -188,7 +188,7 @@ export const StructureList: React.FC<StructureListProps> = ({ onStructureClick }
       )}
 
       {/* Empty State */}
-      {!isLoading && structures.length === 0 && (
+      {!isLoading && (!structures || structures.length === 0) && (
         <div className="text-center py-12">
           <BuildingOfficeIcon className="h-12 w-12 text-gray-400 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-gray-900 mb-2">
@@ -213,19 +213,19 @@ export const StructureList: React.FC<StructureListProps> = ({ onStructureClick }
         <div className="flex items-center justify-between border-t border-gray-200 pt-4">
           <Button
             variant="secondary"
-            disabled={!pagination.has_prev_page}
-            onClick={() => handlePageChange(pagination.current_page - 1)}
+            disabled={!pagination?.has_prev_page}
+            onClick={() => handlePageChange((pagination?.current_page || 1) - 1)}
           >
             Previous
           </Button>
           
           <div className="flex items-center gap-2">
-            {Array.from({ length: Math.min(pagination.total_pages, 5) }, (_, i) => {
+            {Array.from({ length: Math.min(pagination?.total_pages || 0, 5) }, (_, i) => {
               const page = i + 1;
               return (
                 <Button
                   key={page}
-                  variant={page === pagination.current_page ? 'primary' : 'outline'}
+                  variant={page === pagination?.current_page ? 'primary' : 'outline'}
                   size="sm"
                   onClick={() => handlePageChange(page)}
                 >
@@ -233,17 +233,17 @@ export const StructureList: React.FC<StructureListProps> = ({ onStructureClick }
                 </Button>
               );
             })}
-            {pagination.total_pages > 5 && (
+            {(pagination?.total_pages || 0) > 5 && (
               <span className="text-sm text-gray-500">
-                ... {pagination.total_pages}
+                ... {pagination?.total_pages}
               </span>
             )}
           </div>
 
           <Button
             variant="secondary"
-            disabled={!pagination.has_next_page}
-            onClick={() => handlePageChange(pagination.current_page + 1)}
+            disabled={!pagination?.has_next_page}
+            onClick={() => handlePageChange((pagination?.current_page || 1) + 1)}
           >
             Next
           </Button>

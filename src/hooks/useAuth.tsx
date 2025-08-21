@@ -29,40 +29,29 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const token = authService.getAccessToken();
 
       if (storedUser && token) {
-        // Try to fetch fresh user data
         try {
           const freshUser = await authService.getCurrentUser();
           setUser(freshUser);
         } catch (error) {
-          // If fetching fresh data fails, use stored data
           console.warn('Failed to fetch fresh user data, using stored data:', error);
           setUser(storedUser);
         }
       }
     } catch (error) {
       console.error('Auth initialization error:', error);
-      // Clear potentially corrupted data
       await authService.logout();
     } finally {
       setIsLoading(false);
     }
   };
 
-const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
-    console.log('Attempting to log in with credentials:', credentials);
+  const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
     setIsLoading(true);
-    console.log('useAuth login called with:', credentials);
     try {
       const response = await authService.login(credentials);
-      console.log('useAuth login response:', response);
-      
       if (response.success) {
-        console.log('Setting user in useAuth:', response.user);
         setUser(response.user);
-      } else {
-        console.log('Login failed in useAuth:', response.message);
       }
-      
       return response;
     } catch (error) {
       console.error('useAuth login error:', error);
@@ -92,7 +81,6 @@ const login = async (credentials: LoginRequest): Promise<LoginResponse> => {
       setUser(null);
     } catch (error) {
       console.error('Logout error:', error);
-      // Force logout even if API call fails
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -125,30 +113,15 @@ export const useAuth = (): AuthContextType => {
   return context;
 };
 
-// Additional utility hooks
-export const useAuthUser = () => {
+// Helper hooks for convenience in UI components
+export const useAuthUser = (): User | null => {
   const { user } = useAuth();
   return user;
 };
 
-export const useAuthRole = () => {
-  const { user } = useAuth();
-  return user?.role;
-};
-
-export const useAuthPermissions = () => {
-  const { user } = useAuth();
-  return user?.permissions;
-};
-
-export const useCanManageRemarks = () => {
-  useAuth();
-  return authService.canManageRemarks();
-};
-
-export const useHasRole = (requiredRole: string) => {
-  useAuth();
-  return authService.hasRole(requiredRole);
+export const useCanManageRemarks = (): boolean => {
+  const user = useAuthUser();
+  return !!(user && (user.role === 'AD' || user.role === 'VE'));
 };
 
 export default useAuth;
