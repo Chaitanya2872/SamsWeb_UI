@@ -94,12 +94,14 @@ export const useStructures = (params: UseStructuresParams = {}): UseStructuresRe
     }
   }, [fetchStructures, params.autoFetch]);
 
-  // Update page when external page prop changes
+  // Sync with external params when they change
   useEffect(() => {
-    if (params.page !== undefined && params.page !== page) {
-      setPage(params.page);
-    }
-  }, [params.page, page]);
+    if (params.page !== undefined && params.page !== page) setPage(params.page);
+    if (params.search !== undefined && params.search !== search) setSearch(params.search);
+    if (params.status !== undefined && params.status !== status) setStatus(params.status);
+    if (params.sortBy !== undefined && params.sortBy !== sortBy) setSortBy(params.sortBy);
+    if (params.sortOrder !== undefined && params.sortOrder !== sortOrder) setSortOrder(params.sortOrder as 'asc' | 'desc');
+  }, [params.page, params.search, params.status, params.sortBy, params.sortOrder, page, search, status, sortBy, sortOrder]);
 
   return {
     structures,
